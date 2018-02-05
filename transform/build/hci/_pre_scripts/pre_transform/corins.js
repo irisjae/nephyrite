@@ -90,7 +90,7 @@ var image_ify = function (hint, src) {
 			) +
 		'</positioner>' +
 	'</foreignObject>';
-}
+};
 var fulfill_scroll = function (scroll) {
 	var hinted = scroll .parentElement;
 	
