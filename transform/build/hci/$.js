@@ -11,6 +11,7 @@ var primary_dist = config_paths .primary .dist;
 var uis_src = config_paths .uis .src;
 var uis_dist = config_paths .uis .dist;
 var uis_hydrators_dist = config_paths .uis .hydrators_dist;
+var uis_assets_dist = config_paths .uis .assets_dist;
 var scripts_src = config_paths .scripts .src;
 var scripts_dist = config_paths .scripts .dist;
 var riots_src = config_paths .riots .src;
@@ -46,6 +47,7 @@ time ('build', function () {
 		primary_dist,
 		uis_dist,
 		uis_hydrators_dist,
+		uis_assets_dist,
 		scripts_dist,
 		riots_dist,
 		riots_strs_dist,
@@ -82,6 +84,10 @@ time ('build', function () {
 		.forEach (function (_) {
 			write (uis_dist) (_);
 			write (uis_hydrators_dist) (time ('serializing hydrators', uis .hydration));
+			[uis .assets]
+				.forEach (R .addIndex (R .forEach) (function (x, i) {
+					fs .writeFileSync (path .join (uis_assets_dist, i + '.' + x .type), x .data);
+				}))
 		});
 
 	[files ('.ejs') (riots_src)]

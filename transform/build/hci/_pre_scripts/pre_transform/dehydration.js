@@ -3,17 +3,17 @@ var capital_svg_tags = svg_tags .filter (function (x) {
 	return x !== x .toLowerCase ()
 });
 
-var hydrators = [];
-var assets = {};
-var serialize = function (x) {
-	var i = R .indexOf (x, hydrators);
-	if (i === -1) {
-		hydrators .push (x);
-		return '__hydrators [' + (hydrators .length - 1) + ']';
-	}
-	else
-		return '__hydrators [' + i + ']';
+var unbuggy_svg_outer_html = function (x) {
+	return [x .outerHTML]
+		.map (R .reduce (function (html, tag) {
+			return html
+				.split ('<' + tag .toLowerCase ()) .join ('<' + tag)
+				.split ('</' + tag .toLowerCase ()) .join ('</' + tag);
+		}, R .__, capital_svg_tags))
+	[0];
 };
+
+
 var dehydrate = function (x) {
 	if (x === undefined)
 		return 'undefined';
@@ -35,13 +35,8 @@ var dehydrate = function (x) {
 	else if (x .____pre_transformed)
 		return x .____pre_transformed
 	else if (R .is (Node) (x)) {
-		var outer_html = [x .outerHTML]
-			.map (R .reduce (function (html, tag) {
-				return html
-					.split ('<' + tag .toLowerCase ()) .join ('<' + tag)
-					.split ('</' + tag .toLowerCase ()) .join ('</' + tag);
-			}, R .__, capital_svg_tags))
-		[0];
+		var outer_html = unbuggy_svg_outer_html (x);
+		//checks if current tag needs to be parsed under svg namespace
 		if (! R .contains (x .tagName .toLowerCase ()) (['a', 'title', 'tspan', 'script', 'style'] .concat (svg_tags .map (function (x) {return x .toLowerCase ()})))) 
 			var rehydration = 'frag (' + '`<svg>' + outer_html + '</svg>`' + ') .childNodes [0] .childNodes [0]'
 		else

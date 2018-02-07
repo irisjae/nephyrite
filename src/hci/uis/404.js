@@ -1,9 +1,7 @@
 + function () {
     var ui_info = pre (function () {
-        var dom = frame ('404');
-        
         return {
-            dom: serve (dom)
+            dom: frame ('404')
         }
     });
     

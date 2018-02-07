@@ -178,9 +178,10 @@ var process = function (def, scope) {
 };
 
 module .exports = {
+	assets: assets,
 	hydrators: hydrators,
 	process: process,
 	hydration: function () {
-		return 'var __hydrators = [' + hydrators .map ((x) => JSON .stringify (x)) .join (',') + '];';
+		return 'var __hydrators = [' + hydrators .join (',') + '];';
 	}
 }

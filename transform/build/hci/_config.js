@@ -22,7 +22,8 @@ module .exports = {
 		uis: {
 			src: path .join (src__hci, '/uis'),
 			dist: path .join (dist__build__hci, '/scripts/uis.js'),
-			hydrators_dist: path .join (dist__build__hci, '/scripts/uis-hydrators.js')
+			hydrators_dist: path .join (dist__build__hci, '/scripts/uis-hydrators.js'),
+			assets_dist: path .join (dist__build__hci, '/assets/liquefied')
 		},
 		scripts: {
 			src: path .join (src__hci, '/scripts'),

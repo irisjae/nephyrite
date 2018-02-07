@@ -11,10 +11,8 @@ var frame_string = function (_) {
 var frame = function (x) {
 	x = /*time ('parse ' + x, () =>*/ frag (frame_string (x))/*)*/ .children [0];
 	recitify (x);
+	strip_images (x);
 	//uniqify (x);
 	//console .log (x .outerHTML)
 	return x;
-}
-var piece = function (x) {
-	return frag (file (path .join (frames_src, x)))/*)*/ .children [0];
 }
