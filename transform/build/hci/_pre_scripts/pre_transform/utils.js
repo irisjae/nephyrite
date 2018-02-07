@@ -1,4 +1,5 @@
 var serve = function (x) {
+	return x;
 	return [x .cloneNode (true)]
 		.map (R .tap (function (x) {
 			x .setAttribute ('page', '');

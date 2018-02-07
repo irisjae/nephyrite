@@ -1,3 +1,5 @@
+var path = require ('path');
+
 var frames_src = require ('./_config') .paths .frames .src;
 var file = require ('./_util') .file;
 
