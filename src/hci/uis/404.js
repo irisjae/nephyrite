@@ -1,7 +1,7 @@
 + function () {
     var ui_info = pre (function () {
         return {
-            dom: frame ('404')
+            dom: h (frame ('404'), {}, {})
         }
     });
     
