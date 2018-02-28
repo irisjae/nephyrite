@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 [[ `uname` == 'Darwin' ]] && { [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] || { echo "gnu tools not found"; exit 1; } && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"; }
 cd "$(dirname "$0")"
+package_root="$(git rev-parse --show-toplevel)"
 
 . ~/.nvm/nvm.sh 
-package_root="$(npm root | xargs dirname)"
 
 if [ -d "${package_root}/dist/cordova/android" ]; then
 	rm -r "${package_root}/dist/cordova/android"

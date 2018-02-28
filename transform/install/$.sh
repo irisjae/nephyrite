@@ -35,9 +35,9 @@ echo checking nvm version...
 	echo see https://github.com/creationix/nvm#installation;
 	exit 1;
 } && . ~/.nvm/nvm.sh 
-nvm install 7.1.0 && \
-nvm alias node 7.1.0 && \
-nvm alias default 7.1.0
+nvm install 8 && \
+nvm alias node 8 && \
+nvm alias default 8
 echo
 echo
 
@@ -72,13 +72,23 @@ fi
 echo
 echo
 
-cd "$(dirname "$0")"
-cd "$(npm root | xargs dirname)"
 
+
+
+cd "$(dirname "$0")"
+cd "$(git rev-parse --show-toplevel)"
+
+find . -name package.json
 echo installing npm packages...
-npm install
+find . -not -regex .*/node_modules/.* -name package.json -exec bash -c 'for f; do git check-ignore -q "$f" || echo "$f"; done' {} + | while read f; do
+	pushd "$(dirname "$f")"
+	npm install
+	ln -s ../ node_modules/__ 2> /dev/null
+	popd
+done
 echo
 echo
+
 
 echo refreshing amas...
 ./quick/refresh

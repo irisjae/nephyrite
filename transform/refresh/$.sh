@@ -11,8 +11,7 @@ else
 	exit 1
 fi
 
-. ~/.nvm/nvm.sh 
-cd "$(npm root | xargs dirname)"
+cd "$(git rev-parse --show-toplevel)"
 
 {
 	amas_refresh src/cordova

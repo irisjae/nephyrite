@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 . ~/.nvm/nvm.sh 
 cd "$(npm root | xargs dirname)"
 
-./transform/webapp/$.sh || {
+TRANSFORM_OPTIONS='' ./transform/webapp/$.sh || {
 	echo "webapp failed"
 	exit 1
 } && ./transform/serve/$.sh 

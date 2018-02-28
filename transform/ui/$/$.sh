@@ -3,10 +3,15 @@
 cd "$(dirname "$0")"
 package_root="$(git rev-parse --show-toplevel)"
 
-[ -d "${package_root}/dist/cordova/$" ] || {
-	echo "dist/cordova/$ doesn't exist"
+. ~/.nvm/nvm.sh 
+nvm use 8 > /dev/null
+[[ "$(node --version)" == "v8"* ]] || {
+	echo "couldn't change to node v8"
 	exit 1
-} && . ./_$.sh || {
-	echo "cordova/android failed"
+} && [ -d "${package_root}/src/hci" ] || {
+	echo "src/hci doesn't exist"
+	exit 1
+} && node $TRANSFORM_OPTIONS "$.js" || {
+	echo "hci failed"
 	exit 1
 }
