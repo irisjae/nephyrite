@@ -3,24 +3,8 @@ var R = require ('ramda');
 var path = require ('path');
 
 
-var config_paths = require ('./_config') .paths; 
+var ui_paths = require ('./_config') .paths; 
 
-var dist = config_paths .dist;
-var primary_src = config_paths .primary .src;
-var primary_dist = config_paths .primary .dist;
-var uis_src = config_paths .uis .src;
-var uis_dist = config_paths .uis .dist;
-var uis_hydrators_dist = config_paths .uis .hydrators_dist;
-var uis_assets_dist = config_paths .uis .assets_dist;
-var scripts_src = config_paths .scripts .src;
-var scripts_dist = config_paths .scripts .dist;
-var riots_src = config_paths .riots .src;
-var riots_dist = config_paths .riots .dist;
-var riots_strs_dist = config_paths .riots .strs_dist;
-var styles_src = config_paths .styles .src;
-var styles_dist = config_paths .styles .dist;
-var assets_src = config_paths .assets .src;
-var assets_dist = config_paths .assets .dist;
 
 
 //utils
@@ -33,7 +17,7 @@ var write = require ('./_util') .write;
 var prepare = require ('./_util') .prepare;
 
 var riot_tags = require ('./_riots');
-var uis = require ('./_uis');
+var scenes = require ('./_scenes');
 var styles = require ('./_styles');
 					
 					
@@ -41,30 +25,30 @@ var styles = require ('./_styles');
 
 
 //build
-time ('build', function () {
-	fs .removeSync (dist);
+time ('build', () => {
+	fs .removeSync (ui_paths .dist);
 	[
-		primary_dist,
-		uis_dist,
-		uis_hydrators_dist,
-		uis_assets_dist,
-		scripts_dist,
-		riots_dist,
-		riots_strs_dist,
-		styles_dist,
-		assets_dist
+		ui_paths .primary .dist,
+		ui_paths .scenes .dist,
+		ui_paths .scenes .hydrators_dist,
+		ui_paths .scenes .assets_dist,
+		ui_paths .scripts .dist,
+		ui_paths .riots .dist,
+		ui_paths .riots .strs_dist,
+		ui_paths .styles .dist,
+		ui_paths .assets .dist
 	]
 		.forEach (prepare);
 
-	fs .copySync (primary_src, primary_dist);
+	fs .copySync (ui_paths .primary .src, ui_paths .primary .dist);
 	
-	[files ('.js') (uis_src)] 
+	[files ('.js') (ui_paths .scenes .src)] 
 		.map (R .map (R .applySpec ({
 			_path: R .identity,
 			contents: file
 		})))
 		.map (R .map (function (_) {
-			var relative_path = _ ._path .slice (uis_src .length + 1);
+			var relative_path = _ ._path .slice (ui_paths .scenes .src .length + 1);
 			var name = R .head (
 				relative_path
 					.split ('/') .join ('_')
@@ -72,7 +56,7 @@ time ('build', function () {
 			);
 										
 			return time ('preprocessing ' + name, function () {
-				return uis .process (_ .contents);
+				return scenes .process (_ .contents);
 			})
 		}))
 		.map (R .map (function (src) {
@@ -82,21 +66,21 @@ time ('build', function () {
 			 return sum + next; 
 		}, ''))
 		.forEach (function (_) {
-			write (uis_dist) (_);
-			write (uis_hydrators_dist) (time ('serializing hydrators', uis .hydration));
-			[uis .assets]
+			write (ui_paths .scenes .dist) (_);
+			write (ui_paths .scenes .hydrators_dist) (time ('serializing hydrators', scenes .hydration));
+			[scenes .assets]
 				.forEach (R .addIndex (R .forEach) (function (x, i) {
-					fs .writeFileSync (path .join (uis_assets_dist, i + '.' + x .type), x .data);
+					fs .writeFileSync (path .join (ui_paths .scenes .assets_dist, i + '.' + x .type), x .data);
 				}))
 		});
 
-	[files ('.ejs') (riots_src)]
+	[files ('.ejs') (ui_paths .riots .src)]
 		.map (R .map (R .applySpec ({
 			_path: R .identity,
 			contents: file
 		})))
 		.map (R .map (function (_) {
-			var tag_relative_path = _ ._path .slice (riots_src .length + 1);
+			var tag_relative_path = _ ._path .slice (ui_paths .riots .src .length + 1);
 			var tag_name =	R .head (
 								tag_relative_path
 									.split ('/') .join ('-')
@@ -134,15 +118,15 @@ time ('build', function () {
 			var _ = riot_scripts .src;
 			var strings = riot_scripts .strs;
 			
-			write (riots_dist) (_);
-			write (riots_strs_dist) (strings);
+			write (ui_paths .riots .dist) (_);
+			write (ui_paths .riots .strs_dist) (strings);
 		});
 
 	[
 		function (_) {
 			return R .concat (_ .scss_seeds, _ .riot_style_seeds);
 		} ({
-			scss_seeds: [R .concat (files ('.css') (styles_src), files ('.scss') (styles_src))] 
+			scss_seeds: [R .concat (files ('.css') (ui_paths .styles .src), files ('.scss') (ui_paths .styles .src))] 
 				.map (R .map (R .applySpec ({
 					_path: R .identity,
 					contents: file
@@ -150,7 +134,7 @@ time ('build', function () {
 				.map (R .map (function (_) {
 					return {
 						names: [R .head (R .last (_ ._path .split ('/')) .split ('.'))],
-						path: _ ._path .slice (styles_src .length + 1),
+						path: _ ._path .slice (ui_paths .styles .src .length + 1),
 						dependencies: [],
 						metastyles: _ .contents
 					}
@@ -199,19 +183,19 @@ time ('build', function () {
 					'branches length is ' + branches .length  
 		}))
 		.map (R .head)
-		.forEach (write (styles_dist));
+		.forEach (write (ui_paths .styles .dist));
 
-	[files ('.js') (scripts_src)] 
+	[files ('.js') (ui_paths .scripts .src)] 
 		.forEach (R .forEach (function (_path) {
 			var name = R .last (_path .split ('/'));
-			var dest_path = path .join (scripts_dist, name);
+			var dest_path = path .join (ui_paths .scripts .dist, name);
 			fs .symlinkSync (_path, dest_path);
 		}));
 
-	[files ('') (assets_src)]
+	[files ('') (ui_paths .assets .src)]
 		.forEach (R .forEach (function (_path/* of file*/) {
-			var name = _path .slice (assets_src .length + 1);
-			var dest_path = path .join (assets_dist, name);
+			var name = _path .slice (ui_paths .assets .src .length + 1);
+			var dest_path = path .join (ui_paths .assets .dist, name);
 			fs .ensureDirSync (dest_path .split ('/') .slice (0, -1) .join ('/'));
 			//prepare (dest_path);
 			fs .symlinkSync (_path, dest_path);
