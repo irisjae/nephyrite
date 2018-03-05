@@ -12,7 +12,12 @@ var assert = msg => x => {
 
 
 var node_children_collect = (samples, info_collect) =>
-	Oo (Array .from (R .head (samples) .children),
+	Oo (R .head (samples) .children,
+		o (x => (x) ?
+			Array .from (x)
+		:
+			[]
+		),
 		o (R .toPairs),
 		o (R .chain (pair => {
 			var key = pair [0]
@@ -156,7 +161,12 @@ var id_by_attr = function (name) {
 };
 
 var element_connection_info = samples =>
-	Oo (Array .from (R .head (samples) .attributes),
+	Oo (R .head (samples) .attributes,
+		o (x => (x) ?
+			Array .from (x)
+		:
+			[]
+		),
 		o (R .map (x => x .nodeName)),
 		o (R .filter (R .contains (R .__, [ 'xlink:href', 'fill' ]))),
 		o (R .map (name => samples .map (id_by_attr (name)))),
@@ -260,10 +270,12 @@ var svg_with_dimensions = function (x) {
 
 var svg_structure = svg =>
 	Oo (svg .cloneNode (true),
-		o (x => Array .from (x .querySelectorAll ('defs'))),
-		o (R .tap (R .forEach (defs => {
-			defs .parentNode .removeChild (defs);
-		}))))
+		o (R .tap (Oo (R .__,
+			o (x => Array .from (x .querySelectorAll ('defs'))),
+			oO (R .forEach (defs => {
+				defs .parentNode .removeChild (defs)
+			}))
+		))))
 ;
 
 var reconnected_svg = function (svgs, connection_classes) {
@@ -371,10 +383,10 @@ var svg_scale_info = function (svgs) {
 var ____scale_using = ____h => function (width_expr, height_expr) {
 	return function (scale_info, dom) {
 		return ____h ('dom',
-			(x => Oo (x .scales,
+			(_ => Oo (_ .scales,
 				o (x => x || {}),
 				o (R .toPairs),
-				o (R .map (x => x .key_serialize (x) + ':' + x .val_serialize (x))),
+				o (R .map (x => _ .key_serialize (x) + ':' + _ .val_serialize (x))),
 				o (x => '{' + x .join (',') + '}' )
 			))
 				({
@@ -396,9 +408,9 @@ var ____scale_using = ____h => function (width_expr, height_expr) {
 						)),
 						o (x => '`' + x .join ('') + '`'))
 				}), 
-			(x => Oo (x .children,
+			(_ => Oo (_ .children,
 				o (R .toPairs),
-				o (R .map (x => x .key_serialize (x) + ':' + x .val_serialize (x))),
+				o (R .map (x => _ .key_serialize (x) + ':' + _ .val_serialize (x))),
 				o (x => '{' + x .join (',') + '}')
 			))
 				({

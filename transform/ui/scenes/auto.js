@@ -5,6 +5,7 @@ var R = require ('ramda');
 
 var path = require ('path');
 var fs = require ('fs-extra');
+var prepare = require ('../util') .prepare;
 var write = require ('../util') .write;
 
 
@@ -34,7 +35,7 @@ Oo (automate_cache,
 		fs .ensureDirSync (x)
 		Oo (fs .readdirSync (automate_cache),
 			oO (R .forEach (file => {
-				fs .unlinkSync (path .join (directory, file))
+				fs .unlinkSync (path .join (automate_cache, file))
 			})))
 	}))
 
@@ -50,20 +51,23 @@ var auto = R .mergeAll ([
 	{
 		window: require ('__window'),
 		eval: (src, file_name, location) => {
-			var full_name = R .last (R .split ('/') (file_name))
+			var full_name = (file_name .startsWith (config .paths .scenes .src)) ?
+				file_name .slice (config .paths .scenes .src .length + 1)
+			:
+				file_name
 			var proper_name = R .head (R .split ('.') (full_name))
 			var extension = R .last (R .split ('.') (full_name))
-			var automation_path = proper_name
+			var automation_path = path .join (automate_cache,
+				proper_name
 				+ '_' + location .start .line + ':' + location .start .column 
 				+ '-' + location .end .line + ':' + location .end .column
-				+ '.' + extension; 
-			write (automation_path)
-				(`module .exports = auto => {
-					with (auto .window) {
-						return (${src}) ()
-					}
-				}`);
-			return require (automation_path) (auto)
+				+ '.' + extension
+			);
+			prepare (automation_path);
+			write (automation_path) (
+`module .exports = auto => { with (auto .window) { return (${src}) () }}`
+			);
+			return js_dehydration .dehydrate (require (automation_path) (auto))
 		}
 	}
 	, require ('./automate/tree_utils')
@@ -72,6 +76,10 @@ var auto = R .mergeAll ([
 	, { ____h: surplusify }
 	, responsivify
 	, require ('./automate/corins')
+	, {
+		js_dehydration: js_dehydration,
+		image_url_dehydration: image_url_dehydration
+	}
 ]);
 
 module .exports = auto;

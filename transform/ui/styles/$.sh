@@ -8,10 +8,10 @@ nvm use 8 > /dev/null
 [[ "$(node --version)" == "v8"* ]] || {
 	echo "couldn't change to node v8"
 	exit 1
-} && [ -d "${package_root}/src/ui" ] || {
-	echo "src/ui doesn't exist"
+} && [ -d "${package_root}/src/ui/styles" ] || {
+	echo "src/ui/styles doesn't exist"
 	exit 1
 } && node $TRANSFORM_OPTIONS "$.js" || {
-	echo "ui failed"
+	echo "ui/styles failed"
 	exit 1
 }

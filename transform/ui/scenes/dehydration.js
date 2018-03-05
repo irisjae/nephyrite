@@ -83,7 +83,7 @@ var liquefy = image_url => Oo (R .__,
 	x => {
 		var i = R .indexOf (x .data, assets);
 		if (i === -1) {
-			assets .push (x .data);
+			assets .push (x);
 			return (assets .length - 1) + '.' + x .type
 		}
 		else
