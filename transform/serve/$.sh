@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 package_root="$(git rev-parse --show-toplevel)"
 
-. ~/.nvm/nvm.sh 
+. ~/.nvm/nvm.sh --no-use
 nvm use 8 > /dev/null
 [[ "$(node --version)" == "v8"* ]] || {
 	echo "couldn't change to node v8"

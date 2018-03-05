@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 [[ `uname` == 'Darwin' ]] && { [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] || { echo "gnu tools not found"; exit 1; } && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"; }
 cd "$(dirname "$0")"
-. ~/.nvm/nvm.sh 
-cd "$(npm root | xargs dirname)"
+cd "$(git rev-parse --show-toplevel)"
 
 ./transform/build/hci/$.sh

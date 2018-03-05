@@ -34,10 +34,11 @@ echo checking nvm version...
 	echo please install nvm then try again;
 	echo see https://github.com/creationix/nvm#installation;
 	exit 1;
-} && . ~/.nvm/nvm.sh 
+} && . ~/.nvm/nvm.sh --no-use
 nvm install 8 && \
 nvm alias node 8 && \
 nvm alias default 8
+nvm use 8
 echo
 echo
 

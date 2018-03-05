@@ -1,3 +1,6 @@
+var window = require ('__window');
+var document = window .document;
+
 var frag = function (html) {
 	var container = document .createElement ('template');
 	container .innerHTML = html;
@@ -94,4 +97,21 @@ var walk_dom = function (node, func) {
 		walk_dom (node, func);
 		node = node .nextElementSibling;
 	}
+};
+
+module .exports = {
+	frag: frag,
+	svg_: svg_,
+	clip_: clip_,
+	path_: path_,
+	hint_: hint_,
+	hint_bounds: hint_bounds,
+	hint_path: hint_path,
+	hint_use: hint_use,
+	use_bounds: use_bounds,
+	use_path: use_path,
+	bound_rectangle: bound_rectangle,
+	y_translation: y_translation,
+	x_translation: x_translation,
+	walk_dom: walk_dom
 };

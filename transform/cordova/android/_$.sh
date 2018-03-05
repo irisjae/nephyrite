@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 package_root="$(git rev-parse --show-toplevel)"
 
-. ~/.nvm/nvm.sh 
+. ~/.nvm/nvm.sh --no-use
 
 if [ -d "${package_root}/dist/cordova/android" ]; then
 	rm -r "${package_root}/dist/cordova/android"

@@ -1,51 +1,54 @@
+var hint_use = require ('./tree_utils') .hint_use;
+var use_bounds = require ('./tree_utils') .use_bounds;
+
 var input_ify = function (hint) {
 	var use = hint_use (hint .querySelector ('g'));
 	var bounding_box = use_bounds (use)
 	
-	return  '<rect ' +
-				'transform="' + use .getAttribute ('transform') + '" ' +
-				'width="' + (bounding_box .x_max - bounding_box .x_min) + '" ' +
-				'height="' + (bounding_box .y_max - bounding_box .y_min) + '" ' +
-				'fill-opacity="0.001"' +
-			'>' +
-				'<animate attributeName="fill" from="black" to="blue" dur="1s" repeatCount="indefinite" />' +
-			'</rect>' +
-			'<foreignObject ' +
-				'style="' + hint .getAttribute ('style')+ '; display: block;" ' +
-				'transform="' + use .getAttribute ('transform') + '" ' +
-				'width="' + (bounding_box .x_max - bounding_box .x_min) + '" ' +
-				'height="' + (bounding_box .y_max - bounding_box .y_min) + '" ' +
-			'>' +
-				'<overflow-clip ' +
-					'style="' + 
-						'padding: 0;' +
-						'background: transparent;' + 
-						'width: 100%;' +
-						'height: 100%;' + 
-						'overflow: hidden;' + 
-						'z-index: 9999;' + 
-						'display: flex;' + 
-						'flex-direction: column;' +
-						'align-content: space-around;' +
-				'">' +
-					'<input ' +
-						([] .filter .call (hint .attributes, function (attr) { return attr .nodeName !== 'style' })
-							.map (function (attr) {
-								return attr .nodeName + '="' + attr .nodeValue + '"'
-							}
-						) .join (' ')) + ' ' +
-						'style="' +
-							'outline: none;' + 
-							'border: none;' + 
-							'padding: 0px;' + 
-							'margin: 0px;' + 
-							'display: block;' +
-							'background: transparent;' +
-							'width: 1e+07vw;' + 
-							'-webkit-appearance: none;' +
-					'">' +
-				'</overflow-clip>' +
-			'</foreignObject>';
+	return '<rect ' +
+		'transform="' + use .getAttribute ('transform') + '" ' +
+		'width="' + (bounding_box .x_max - bounding_box .x_min) + '" ' +
+		'height="' + (bounding_box .y_max - bounding_box .y_min) + '" ' +
+		'fill-opacity="0.001"' +
+	'>' +
+		'<animate attributeName="fill" from="black" to="blue" dur="1s" repeatCount="indefinite" />' +
+	'</rect>' +
+	'<foreignObject ' +
+		'style="' + hint .getAttribute ('style')+ '; display: block;" ' +
+		'transform="' + use .getAttribute ('transform') + '" ' +
+		'width="' + (bounding_box .x_max - bounding_box .x_min) + '" ' +
+		'height="' + (bounding_box .y_max - bounding_box .y_min) + '" ' +
+	'>' +
+		'<overflow-clip ' +
+			'style="' + 
+				'padding: 0;' +
+				'background: transparent;' + 
+				'width: 100%;' +
+				'height: 100%;' + 
+				'overflow: hidden;' + 
+				'z-index: 9999;' + 
+				'display: flex;' + 
+				'flex-direction: column;' +
+				'align-content: space-around;' +
+		'">' +
+			'<input ' +
+				([] .filter .call (hint .attributes, function (attr) { return attr .nodeName !== 'style' })
+					.map (function (attr) {
+						return attr .nodeName + '="' + attr .nodeValue + '"'
+					}
+				) .join (' ')) + ' ' +
+				'style="' +
+					'outline: none;' + 
+					'border: none;' + 
+					'padding: 0px;' + 
+					'margin: 0px;' + 
+					'display: block;' +
+					'background: transparent;' +
+					'width: 1e+07vw;' + 
+					'-webkit-appearance: none;' +
+			'">' +
+		'</overflow-clip>' +
+	'</foreignObject>';
 };
 var text_ify = function (hint, text) {
 	text = text || '';
@@ -114,4 +117,11 @@ var fulfill_scroll = function (scroll) {
 	hinted .setAttribute ('scroll-x-max', bounding_box .x_max);
 	hinted .setAttribute ('scroll-y-min', bounding_box .y_min);
 	hinted .setAttribute ('scroll-y-max', bounding_box .y_max);
+};
+
+module .exports = {
+	input_ify: input_ify,
+	text_ify: text_ify,
+	image_ify: image_ify,
+	fulfill_scroll: fulfill_scroll
 };

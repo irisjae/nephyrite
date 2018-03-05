@@ -13,7 +13,7 @@ var root_path = Oo (require ('child_process') .execSync ('git rev-parse --show-t
 	o (R .head));
 var under_root = R .map (R .cond ([
 	[R .is (String), x => path .join (root_path, x)],
-	[R .is (Object), under_root]
+	[R .is (Object), x => under_root (x)]
 ]));
 
 module .exports = {
@@ -34,6 +34,7 @@ module .exports = {
 		scenes: {
 			src: '/src/ui/scenes',
 			dist: '/dist/ui/scripts/scenes.js',
+			automation_cache: '/temp/automation/cache',
 			hydrators_dist: '/dist/ui/scripts/scenes-hydrators.js',
 			assets_dist: '/dist/ui/assets/liquefied'
 		},
