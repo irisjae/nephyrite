@@ -33,7 +33,7 @@ module .exports = {
 		},
 		scenes: {
 			src: '/src/ui/scenes',
-			dist: '/dist/ui/scripts/scenes.js',
+			dist: '/dist/ui/scenes',
 			automation_cache: '/temp/automation/cache',
 			hydrators_dist: '/dist/ui/scripts/scenes-hydrators.js',
 			assets_dist: '/dist/ui/assets/liquefied'
