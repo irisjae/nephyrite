@@ -135,7 +135,7 @@ module .exports = dehydrate => {
 				R .merge (x, {
 					adoption: Oo (x .expression,
 						o (switch_ ([
-							[R .tryCatch (Oo (R. __,
+							[R .tryCatch (Oo (R .__,
 	//o (R.tap(x=>{debugger;eval('debugger;')})),
 								o (context), o (R .cond ([
 									[R .is (Function), Oo (x .selection, R .__)],
@@ -159,7 +159,7 @@ module .exports = dehydrate => {
 		[as_ (array_expression), Oo (R .__,
 			o (flatten_array_expression),
 			o (switch_ ([
-				[R .tryCatch (Oo (R. __, o (context), o (R .cond ([
+				[R .tryCatch (Oo (R .__, o (context), o (R .cond ([
 	//node transformers are useless here, as arrays dont transform nodes
 						[R .is (Function), R .F],
 						[R .T, x => x]
@@ -199,7 +199,7 @@ module .exports = dehydrate => {
 					[x => x .function_, x => document .createElement (next_mark ({ function_: x }))]
 				])),
 				o (R .tap (x => {
-					Oo (R. keys (attrs),
+					Oo (R .keys (attrs),
 						oO (R .forEach (function (key) {
 							x .setAttribute (key, next_mark ({ val: attrs [key] }));
 						})))
@@ -210,7 +210,7 @@ module .exports = dehydrate => {
 					Oo (adoptions,
 						oO (R .cond ([
 							[R .is (Object), Oo (R .__,
-								o (R. keys),
+								o (R .keys),
 								oO (R .forEach (function (selector) {
 									var orphan = x .querySelector (selector);
 									var adoptee = adoptions [selector] ;

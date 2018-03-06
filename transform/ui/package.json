@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "__window": "file:scenes/polyfill/__window",
     "css": "^2.2.1",
     "css-semdiff": "^1.1.1",
     "esprima": "^4.0.0",
@@ -12,5 +11,11 @@
     "ramda": "^0.25.0",
     "surplus": "^0.5.0",
     "svg-path-parser": "^1.1.0"
+  },
+  "link-dependencies": {
+    "__window": "./scenes/polyfill/__window"
+  },
+  "scripts": {
+    "install": "echo \"var links = require('./package.json') ['link-dependencies'] || {}; for (var package in links) { if (require ('fs') .existsSync ('node_modules/' + package)) require ('fs') .unlinkSync ('node_modules/' + package); require ('fs') .symlinkSync (require ('path') .join ('..', links [package]), 'node_modules/' + package, 'dir'); }\" | node"
   }
 }
