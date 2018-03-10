@@ -8,7 +8,7 @@ var path = require ('path');
 
 
 
-var root_path = Oo (require ('child_process') .execSync ('git rev-parse --show-toplevel') .toString (),
+var root_path = Oo (require ('child_process') .execSync ('cd ' + __dirname + '; git rev-parse --show-toplevel') .toString (),
 	o (R .split ('\n')),
 	o (R .head));
 var under_root = R .map (R .cond ([

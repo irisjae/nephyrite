@@ -20,7 +20,7 @@ var recitify = dom => {
 			}
 			
 			while (attribute_string) {
-				var next_attribute = /^\/([^"/ =]+)(?:=([^"/ ]+)|="([^"/]+)")?/ .exec (attribute_string);
+				var next_attribute = /^\/([^"/ =]+?)(?:=([^"/ ]+?)|="([^"]+?)")?(?=\s|$)/ .exec (attribute_string);
 				if (! next_attribute)
 					throw new Error ('invalid attribute string ' + id);
 				else {

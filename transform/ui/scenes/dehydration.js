@@ -11,8 +11,10 @@ var unbuggy_svg_outer_html = x =>
 	Oo (x .outerHTML,
 		o (R .reduce ((html, tag) =>
 			Oo (html,
-				o (R .split ('<' + tag .toLowerCase ()) .join ('<' + tag)),
-				o (R .split ('</' + tag .toLowerCase ()) .join ('</' + tag)))
+				o (R .split ('<' + tag .toLowerCase ())),
+				o (R .join ('<' + tag)),
+				o (R .split ('</' + tag .toLowerCase ())),
+				o (R .join ('</' + tag)))
 		, R .__, capital_svg_tags))
 	)
 ;
