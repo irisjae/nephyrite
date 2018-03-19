@@ -9,3 +9,6 @@
 
 # npm modules
 /node_modules
+
+#ignore frame renting
+/src/ui/frames
