@@ -1,21 +1,18 @@
 var R = require ('ramda');
+
 var scss = require ('node-sass');
 var css = require ('css');
 var path = require ('path');
 var fs = require ('fs-extra');
 
-var time = require ('../util') .time
-var md5 = require ('../util') .md5
-var file = require ('../util') .file
-var write = require ('../util') .write
+var time = require ('__/util') .time
+var md5 = require ('__/util') .md5
+var file = require ('__/util') .file
+var write = require ('__/util') .write
 
 
-
-
-
-
-var styles_cache = require ('../config') .paths .styles .cache;
-var styles_copy = require ('../config') .paths .styles .copy;
+var styles_cache = require ('__/config') .paths .styles .cache;
+var styles_copy = require ('__/config') .paths .styles .copy;
 
 
 
@@ -23,25 +20,25 @@ var styles_copy = require ('../config') .paths .styles .copy;
 
 
 
-scss .compile =	function (metastyles) {
-					return	(scss .renderSync ({
-								data: metastyles || '/**/'/*,
-								omitSourceMapUrl: true,
-								sourceMap: false,
-								sourceMapContents: false,
-								sourceMapEmbed: false,
-								sourceMapRoot: false*/
-							})) .css .toString ();
-				};
-var stringify =	function (node_array) {
-					return	css .stringify ({
-								type: 'stylesheet',
-								stylesheet:	{
-												rules: node_array,
-												parsingErrors: []
-											}
-							});
-				};
+scss .compile = function (metastyles) {
+	return	(scss .renderSync ({
+				data: metastyles || '/**/'/*,
+				omitSourceMapUrl: true,
+				sourceMap: false,
+				sourceMapContents: false,
+				sourceMapEmbed: false,
+				sourceMapRoot: false*/
+			})) .css .toString ();
+};
+var stringify = function (node_array) {
+	return css .stringify ({
+		type: 'stylesheet',
+		stylesheet: {
+			rules: node_array,
+			parsingErrors: []
+		}
+	});
+};
 var union =	function (styles_set) {
 				/*if (styles_set .length === 1)
 					return styles_set [0];*/
@@ -110,7 +107,7 @@ var grow_nodes =	function (baby_nodes, grown_nodes) {
     													}) .join (' + ')
     													: 'cached free group'
 								                    ), () =>
-														cache_at (dependency_path .slice (styles_cache .length + 1),
+														cache_at (dependency_path .slice (styles_cache .length),
 															dependency_styles,
 															() => union ([dependency_styles])
 														)
@@ -124,7 +121,7 @@ var grow_nodes =	function (baby_nodes, grown_nodes) {
 									delete node_ .metastyles;
 									return node_
 								}), null, 4); 
-								cache_at (path .join (dir_path, 'dependencies.json') .slice (styles_cache .length + 1),
+								cache_at (path .join (dir_path, 'dependencies.json') .slice (styles_cache .length),
 									dependencies_json,
 									() => dependencies_json
 								)
@@ -138,7 +135,7 @@ var grow_nodes =	function (baby_nodes, grown_nodes) {
 												node_ [i] = node [i];
 											}
 											node_ .styles =	time ('cached extension ' + node .path, () =>
-																cache_at (path_ .slice (styles_cache .length + 1), dependency_styles + node .metastyles, () =>
+																cache_at (path_ .slice (styles_cache .length), dependency_styles + node .metastyles, () =>
 																	extend (dependency_styles, metastyles)));
 											return node_;
 										})

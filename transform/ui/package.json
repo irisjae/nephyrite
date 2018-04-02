@@ -10,12 +10,15 @@
     "o-o-o-o-o": "0.0.2",
     "ramda": "^0.25.0",
     "surplus": "^0.5.0",
-    "svg-path-parser": "^1.1.0"
+    "svg-path-parser": "^1.1.0",
+    "uglify-js": "^3.3.16"
   },
   "link-dependencies": {
-    "__window": "./scenes/polyfill/__window"
+    "__": ".",
+    "__window": "./__polyfills/__window"
   },
   "scripts": {
-    "install": "echo \"var links = require('./package.json') ['link-dependencies'] || {}; for (var package in links) { if (require ('fs') .existsSync ('node_modules/' + package)) require ('fs') .unlinkSync ('node_modules/' + package); require ('fs') .symlinkSync (require ('path') .join ('..', links [package]), 'node_modules/' + package, 'dir'); }\" | node"
+    "preinstall": "echo \"var links = require ('./package.json') ['link-dependencies'] || {}; for (var package in links) { try { require ('fs') .unlinkSync ('node_modules/' + package); } catch (e) {} }\" | node",
+    "postinstall": "echo \"var links = require ('./package.json') ['link-dependencies'] || {}; for (var package in links) { require ('fs') .symlinkSync (require ('path') .join ('..', links [package]), 'node_modules/' + package, 'dir'); }\" | node"
   }
 }

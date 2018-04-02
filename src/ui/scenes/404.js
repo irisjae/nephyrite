@@ -1,25 +1,22 @@
-+ function () {
+var auto = require ('__auto')
 
-	var ui_info = {
-		dom: (width, height) => pre (function () {
-			return (_ => h (_ .frame, {}, {}))
-				((_ => ({
-					frame: scale_using (width, height) (_ .scale_info, _ .base_frame)
-				}))
-					(Oo (frame_set ('404'), o (svg_scale_info), o (x => ({
-						scale_info: x .scale,
-						base_frame: x .svg
-					})))))
-				
-		})
-	};
+var ui_info = {
+	dom : (width, height) => auto (() => {
+		var _x_ = Oo (frame_set ('404'), o (svg_scale_info))
+		var scale_info = _x_ .scale
+		var base_frame = _x_ .svg
+
+		var frame = auto .scale_using (width, height) (scale_info, base_frame)
+
+
+		return auto .h (frame, {}, {})
+	})
+}
+
+module .exports = x => {
+	var dom = ui_info .dom .cloneNode (true);
 	
-	window .uis = R .assoc (
-		'404', function (_) {
-			var dom = ui_info .dom .cloneNode (true);
-			
-			return {
-				dom: dom
-			};
-		}) (window .uis);
-} ();
+	return {
+		dom: dom
+	}
+}

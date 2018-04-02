@@ -14,6 +14,7 @@ var document = window .document;
 var Node = require ('__window/Node');
 
 
+//todo: find a better representation than proto for the chain of marks?
 var proto_merge_all = R .reduce ((x, next) =>
 	Oo (Object .create (x),
 		o (R .tap (x => {Object .assign (x, next)}))
@@ -25,6 +26,8 @@ var proto_length = object => x =>
 		0
 	:
 		proto_length (Object .getPrototypeOf (object)) (x) + 1
+
+
 var throw_ = x => { throw x };
 var switch_ = R .cond ([
 	[x => Oo (x, o (R .is (Array)))
@@ -128,12 +131,15 @@ module .exports = dehydrate => {
 					expression: x [1]
 				})
 			)),
+	//textbook use case for typing
 			o (switch_ ([
 				[as_ (R .all (x => x .selection)), x => x]
 			])),
 			o (R .map (x =>
 				R .merge (x, {
 					adoption: Oo (x .expression,
+	//is there a better switch for this?
+	//for like try/catch switch tree with backtrack
 						o (switch_ ([
 							[R .tryCatch (Oo (R .__,
 	//o (R.tap(x=>{debugger;eval('debugger;')})),
@@ -143,10 +149,12 @@ module .exports = dehydrate => {
 								])),
 								o (switch_ ([
 									[as_ (x => x .marked_node), x => x],
+									//last function, y must not be x otherwise variable hiding will give your debugging a hard time
 									[as_ (R .is (Node)), x => ____h ('x', '{}', '{}', y => eval (y))],
 									[dehydrate, x => ({ ____pre_transformed: x })]
 	//if fails, x is non-dehydratable
 	//aka probably was function that was supposed to be passed to surplus as dynamic function
+	//aka a closure with reference to dynamic vars
 								]))), R .F), x => x],
 							[as_ (R .tryCatch (expression_, R .F)), x => ({ expression: x })]
 						]))
@@ -158,9 +166,11 @@ module .exports = dehydrate => {
 		)],
 		[as_ (array_expression), Oo (R .__,
 			o (flatten_array_expression),
-			o (switch_ ([
+			o (R .map (switch_ ([
 				[R .tryCatch (Oo (R .__, o (context), o (R .cond ([
 	//node transformers are useless here, as arrays dont transform nodes
+	//; arrays adds nodes
+	//warning: the array expression branch is not debugged
 						[R .is (Function), R .F],
 						[R .T, x => x]
 					]))), R .F)
@@ -170,14 +180,14 @@ module .exports = dehydrate => {
 						[dehydrate, x => ({ ____pre_transformed: x })]
 					])],
 				[as_ (R .tryCatch (expression_, R .F)), x => ({ expression: x })]
-			]))
+			])))
 		)]
 	]);
 	//base_node: node | marked_node | identifier-expr (runtime function)
 	//attrs: { attribute-name: expr | pre_transformed }
 	//attr_spreads: [ identifier-expr ]
 	//adoptions: { selector: expr | pre_transformed | marked_node } | [ expr | pre_transformed | marked_node ]
-	var marked_node = (attrs, attr_spreads, adoptions) =>
+	var mark_node = (attrs, attr_spreads, adoptions) =>
 		(node) => {
 			var transform_prefix = 'placeholder-of-decorate-node-' + Math .floor (Math .random () * 10000) + '-';
 	//console.error('-------------------------------------')
@@ -202,11 +212,11 @@ module .exports = dehydrate => {
 					Oo (R .keys (attrs),
 						oO (R .forEach (function (key) {
 							x .setAttribute (key, next_mark ({ val: attrs [key] }));
-						})))
+						})));
 					Oo (attr_spreads,
 						oO (R .forEach (function (spread) {
 							x .setAttribute (next_mark ({ spread: spread }), '');
-						})))
+						})));
 					Oo (adoptions,
 						oO (R .cond ([
 							[R .is (Object), Oo (R .__,
@@ -218,10 +228,15 @@ module .exports = dehydrate => {
 									orphan .parentNode .removeChild (orphan);
 								}))
 							)],
-							[R .is (Array), R .forEach (function (adoption) {
-								x .insertBefore (document .createElement (next_mark ({ adoption: adoption })), null);
-							})]
-						])))
+							[R .is (Array), replacements => {
+								Oo (Array .from (x .children), oO (orphan => {
+									x .removeChild (orphan);
+								}));
+								Oo (replacements, oO (R .forEach (adoption => {
+									x .insertBefore (document .createElement (next_mark ({ adoption: adoption })), null);
+								})));
+							}]
+						])));
 				})),
 	//o(R.tap(x=>console.error(Oo (R.keysIn (marks), o(R.filter(x=>marks[x].adoption)),o (R .sortBy (proto_length (marks))))))),
 	//o(R.tap(x=>console.error('----from:'))),
@@ -234,7 +249,7 @@ module .exports = dehydrate => {
 			)
 		}
 	;
-	var resolve_marked_node = marks => (_ => Oo (R .__,
+	var transform_marked_node = marks => (_ => Oo (R .__,
 	//o(R.tap(x=>console.error('-------------------------------------'))),
 	//o(R.tap(x=>console .error ('marks: ', R.keysIn(marks).filter(x=>marks[x].adoption)))),
 	//o(R.tap(x=>console.error('----from:'))),
@@ -282,7 +297,7 @@ module .exports = dehydrate => {
 					o (R .partition (marker => (_ => _ .adoption .marked_node) ({ adoption: marks [marker] .adoption })))
 	//,o(R.tap(x=>{debugger;eval('debugger;')}))
 				))));
-	var resolve_jsx = marks => 
+	var transform_jsx = marks => 
 		Oo (marks,
 			o (R .keysIn),
 			o (R .chain (marker =>
@@ -307,15 +322,15 @@ module .exports = dehydrate => {
 		var attr_spreads = resolve_attr_spreads (context) (attrs_expr);
 		var adoptions = resolve_adoptions (context, node) (adoptions_expr);
 		return Oo (node,
-			o (marked_node (attrs, attr_spreads, adoptions)),
+			o (mark_node (attrs, attr_spreads, adoptions)),
 	//o (R .tap (x => console .error (x .marks))),
 			o (x => R .merge (x, {
 				____pre_transformed: Oo (x .marked_node,
-					o (resolve_marked_node (x .marks)),
+					o (transform_marked_node (x .marks)),
 	//o (R.tap(x=>console.error(x))),
 					o (jsxer),
 	//o (R.tap(x=>console.error(x))),
-					o (resolve_jsx (x .marks)),
+					o (transform_jsx (x .marks)),
 	//o (R.tap(x=>console.error(x))),
 					o (surpluser))
 			})))

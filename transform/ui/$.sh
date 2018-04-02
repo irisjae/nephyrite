@@ -11,7 +11,15 @@ nvm use 8 > /dev/null
 } && [ -d "${package_root}/src/ui" ] || {
 	echo "src/ui doesn't exist"
 	exit 1
-} && node $TRANSFORM_OPTIONS "$.js" || {
+} && time (
+	rm -r "$package_root/dist/ui-build" 2> /dev/null
+
+	node ./$.js &&
+	./build/scenes/$.sh &&
+	./build/styles/$.sh &&
+	./build/scripts/$.sh &&
+	./build/assets/$.sh
+) || {
 	echo "ui failed"
 	exit 1
 }
