@@ -44,28 +44,7 @@ var responsivify = require ('./automate/responsivify') (surplusify)
 
 
 var auto = R .mergeAll ([
-	{
-		window : require ('__window'),
-		eval : (src, file_name, location) => {
-			var full_name = !! (file_name .startsWith (config .paths .scenes .src)) ?
-				file_name .slice (config .paths .scenes .src .length)
-			:
-				file_name
-			var proper_name = R .head (R .split ('.') (full_name))
-			var extension = R .last (R .split ('.') (full_name))
-			var automation_path = path .join (automate_cache
-				, proper_name
-					+ '_' + location .start .line + ':' + location .start .column 
-					+ '-' + location .end .line + ':' + location .end .column
-					+ '.' + extension)
-
-			;; prepare (automation_path)
-			;; write (automation_path) (
-`module .exports = auto => { with (auto .window) { return (${src}) () }}`
-			);
-			return js_dehydration .dehydrate (require (automation_path) (auto))
-		}
-	}
+	{ window : require ('__window') }
 	, require ('./automate/tree_utils')
 	, require ('./automate/tree_transforms')
 	, frames
