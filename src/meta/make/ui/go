@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+use_deps || {
+	echo "please compile $0"
+	exit 1
+} && use_node || {
+	exit 1
+} && use_file "$src" || {
+	exit 1
+} && time (
+	rm -r "$yield" 2> /dev/null
+
+	(node "fn.js"
+	) && (./build/scenes/go
+	) && (./build/styles/go
+	) && (./build/scripts/go
+	) && (./build/assets/go
+	) ) || {
+	echo "failed to make ui"
+	exit 1; }

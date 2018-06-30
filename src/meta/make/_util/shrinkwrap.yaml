@@ -1,0 +1,114 @@
+dependencies:
+  fs-extra: 6.0.1
+  metamorphoses: 0.0.1
+  ramda: 0.25.0
+  sanctuary: 0.15.0
+  sanctuary-def: 0.18.1
+packages:
+  /fs-extra/6.0.1:
+    dependencies:
+      graceful-fs: 4.1.11
+      jsonfile: 4.0.0
+      universalify: 0.1.2
+    dev: false
+    resolution:
+      integrity: sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==
+  /graceful-fs/4.1.11:
+    dev: false
+    engines:
+      node: '>=0.4.0'
+    resolution:
+      integrity: sha1-Dovf5NHduIVNZOBOp8AOKgJuVlg=
+  /jsonfile/4.0.0:
+    dev: false
+    optionalDependencies:
+      graceful-fs: 4.1.11
+    resolution:
+      integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=
+  /metamorphoses/0.0.1:
+    dependencies:
+      ramda: 0.25.0
+      sanctuary: 0.15.0
+      sanctuary-def: 0.18.1
+    dev: false
+    resolution:
+      integrity: sha512-jZXlPG0lKINt0MGOYhrBTorF+bbiVkCy2xhxwaBQj+DHHVg2cK18YrWWNek3Ct7VNc1xyYdAzqr2tSKzlA1h7A==
+  /ramda/0.25.0:
+    dev: false
+    resolution:
+      integrity: sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ==
+  /sanctuary-def/0.18.1:
+    dependencies:
+      sanctuary-either: 1.0.0
+      sanctuary-show: 1.0.0
+      sanctuary-type-classes: 9.0.0
+      sanctuary-type-identifiers: 2.0.1
+    dev: false
+    resolution:
+      integrity: sha512-Ltu/gU5ZskRln8NI6YJru5JbpkcMe4XqFx5zJMZysTKPmOVkETys5eVvZmclNLzPNrOIPvqBGJtD/D2q9yvP/A==
+  /sanctuary-either/1.0.0:
+    dependencies:
+      sanctuary-show: 1.0.0
+      sanctuary-type-classes: 9.0.0
+    dev: false
+    resolution:
+      integrity: sha512-j4WAlwILU83wawXJQCSh5kVK27gxOykMuCfUfUOba/qUcFE+FxwHkt7lnHVYDjt7jG9SENe8bTQzPH/Zmhy3Ag==
+  /sanctuary-maybe/1.0.0:
+    dependencies:
+      sanctuary-show: 1.0.0
+      sanctuary-type-classes: 9.0.0
+    dev: false
+    resolution:
+      integrity: sha512-4TUjIxznxTZ1dh8Zw4PRhaVkzY8KIZ4GGsOXBytOSV83MRRGkuz7wJHj3bfh2i9lOekbjf0Oal6v7IF6uDiYvg==
+  /sanctuary-pair/1.0.0:
+    dependencies:
+      sanctuary-show: 1.0.0
+      sanctuary-type-classes: 9.0.0
+    dev: false
+    resolution:
+      integrity: sha512-fqXCO6boMLW7ZHrjc573u5maNdytIrNxeaotBBGrvbEVqiNeA6VH4eGARMLTCRdgOtW94aF5EUkBZCzvXLSujQ==
+  /sanctuary-show/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha512-63UqNGr5M6wkzKp6eGc/Gy6JBIV2PbzPd3q88+0F9z0qydAQsCWJ+7e4oor39rEEwj2GkZMDEhqGuiMl9eEnYw==
+  /sanctuary-type-classes/9.0.0:
+    dependencies:
+      sanctuary-type-identifiers: 1.0.0
+    dev: false
+    resolution:
+      integrity: sha512-rFW27f3D622kxKravpGU9OjWn66fnDjDjGPvoYo4hEoBg2ocypvp0R9cs0YovKL3jTO+PTceUBh5tYZ+l9ay3g==
+  /sanctuary-type-identifiers/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-6PNZ8AbLXmJM+4RkYD/BFGCL3p8=
+  /sanctuary-type-identifiers/2.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-/FJM9t2Szr/LsN2VCe/xkxWaIO0=
+  /sanctuary/0.15.0:
+    dependencies:
+      sanctuary-def: 0.18.1
+      sanctuary-either: 1.0.0
+      sanctuary-maybe: 1.0.0
+      sanctuary-pair: 1.0.0
+      sanctuary-show: 1.0.0
+      sanctuary-type-classes: 9.0.0
+      sanctuary-type-identifiers: 2.0.1
+    dev: false
+    resolution:
+      integrity: sha512-cyrFHazodEFlv6qVX/+qujO+jly2MXRMyNXR61jaqJG42JlCJnKpgQGvebYINaiRUbZ+P5Dr2Ai3Tg+vzNYCUw==
+  /universalify/0.1.2:
+    dev: false
+    engines:
+      node: '>= 4.0.0'
+    resolution:
+      integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
+registry: 'https://registry.npmjs.org/'
+shrinkwrapMinorVersion: 8
+shrinkwrapVersion: 3
+specifiers:
+  fs-extra: ^6.0.1
+  metamorphoses: ^0.0.1
+  ramda: ^0.25.0
+  sanctuary: ^0.15.0
+  sanctuary-def: ^0.18.1

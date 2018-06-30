@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+use_deps || {
+	echo "please compile $0"
+	exit 1 
+} && use_coreutils || {
+	exit 1 
+} && use_file "$src/go" || {
+	exit 1 
+} && {
+	mkdir -p "$yield" && rm -r "$yield/*" 2> /dev/null
+	cp "$src/go" "$yield/go"
+
+	function search_deps {
+		([[ -f "$1/deps.sh" ]]
+		) && {
+			echo "$1/deps.sh"
+			return 0
+		} || ([[ "$1" == / ]]
+		) && {
+			return 1 
+		} || {
+			o="$(search_deps "$(dirname $1)")"
+			e=$?
+			echo "$o"
+			return $e ;} }
+	
+	dep_path="$(search_deps "$src")"
+	has_dep=$?
+
+	function status {
+		return $1 ;}
+	
+	(status $has_dep) && {
+		#remove shebang
+		sed -i '1d' "$yield/go"
+		echo -e "$(cat "$dep_path")\n$(cat "$yield/go")" > "$yield/go" ;}
+
+	function rel_path {
+		source="$(readlink -f "$1")"
+		target="$(readlink -f "$2")"
+			
+		common_part=$source
+		result=""
+
+		while [[ "${target#$common_part}" == "${target}" ]]; do
+		    common_part="$(dirname $common_part)"
+		    if [[ -z $result ]]; then
+			result=".."
+		    else
+			result="../$result" ;fi ;done
+
+		if [[ $common_part == "/" ]]; then
+		    result="$result/" ;fi
+
+		forward_part="${target#$common_part}"
+
+		if [[ -n $result ]] && [[ -n $forward_part ]]; then
+		    result="$result$forward_part"
+		elif [[ -n $forward_part ]]; then
+		    result="${forward_part:1}" ;fi
+
+		echo $result; }
+
+	src_from_root="$(rel_path "$root" "$src")"
+	src_rel_path="$(echo '$root/'"$src_from_root" | sed 's/\//\\\//g')"
+
+	src_from_yield="$(rel_path "$yield" "$src")"
+
+	sed -i "s/"'$0'"/$src_rel_path/" "$yield/go"
+	sed -i '2 i cd "$(dirname "$0")"' "$yield/go"
+
+	} || {
+	echo "failed to make go of $src"
+	exit 1 ;}

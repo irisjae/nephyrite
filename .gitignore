@@ -1,11 +1,11 @@
 # invisible
-/experiment/invisible
+invisible
 
-# dist
-/dist/**
+# yield
+/yield/**
 
 # temp
 /temp
 
 # npm modules
-/node_modules
+node_modules

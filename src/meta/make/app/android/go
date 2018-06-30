@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+use_deps || {
+	echo "please compile $0"
+	exit 1
+} && use_gnu_core_utils || {
+	exit 1
+} && use_node || {
+	exit 1
+} && use_file "$src" || {
+	exit 1
+} && {
+	if [ -d "${package_root}/dist/cordova/android" ]; then
+		rm -r "${package_root}/dist/cordova/android" ;fi
+
+	mkdir "${package_root}/dist/cordova/android"
+	cd "${package_root}/dist/cordova/android"
+
+	find "${package_root}/dist/cordova/$" -mindepth 1 -maxdepth 1 -print0 \
+		| xargs -0 ln -s --target-directory=.
+
+	cp --remove-destination "$(readlink -f config.xml)" config.xml
+	echo "$(cat config.xml | grep -Ev "$(cat config.xml \
+			| grep "engine\ name=\"" \
+			| sed "s/^.\+name=\"\([^\"]\+\)\".\+/\1/" \
+			| grep -v android \
+			| sed "s/\(.\+\)/engine\ name=\"\1\"/" \
+			| paste -sd "|" -
+		)"
+	)" > config.xml
+
+	cordova prepare
+	cordova-splash
+	cordova-icon
+	#maybe no need www?
+	#zip -r cordova-android.zip config.xml www/ platforms/ plugins/
+	} || {
+	echo "failed to make app/android"
+	exit 1; }
+

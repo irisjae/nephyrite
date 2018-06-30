@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "koa": "^2.0.0-alpha.7",
+    "koa-bodyparser": "^3.2.0",
+    "koa-compose": "^2.5.1",
+    "koa-compress": "^2.0.0",
+    "koa-cors": "0.0.16",
+    "koa-json": "^2.0.2",
+    "koa-morgan": "^1.0.1",
+    "koa-qs": "^2.0.0",
+    "koa-static": "^3.0.0",
+    "o-o-o-o-o": "0.0.2",
+    "ramda": "^0.24.1"
+  }
+}

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+use_deps || {
+	echo "please compile $0"
+	exit 1
+} && use_node || {
+	exit 1
+} && use_file "$src" || {
+	exit 1
+} && node "fn.js" || {
+	echo "failed to host ni"
+	exit 1; }
