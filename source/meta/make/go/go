@@ -4,11 +4,11 @@ use_deps || {
 	exit 1 
 } && use_coreutils || {
 	exit 1 
-} && use_file "$src/go" || {
+} && use_file "$source/go" || {
 	exit 1 
 } && {
-	mkdir -p "$yield" && rm -r "$yield/*" 2> /dev/null
-	cp "$src/go" "$yield/go"
+	mkdir -p "$out" && rm -r "$out/*" 2> /dev/null
+	cp "$source/go" "$out/go"
 
 	function search_deps {
 		([[ -f "$1/deps.sh" ]]
@@ -24,7 +24,7 @@ use_deps || {
 			echo "$o"
 			return $e ;} }
 	
-	dep_path="$(search_deps "$src")"
+	dep_path="$(search_deps "$source")"
 	has_dep=$?
 
 	function status {
@@ -32,12 +32,12 @@ use_deps || {
 	
 	(status $has_dep) && {
 		#remove shebang
-		sed -i '1d' "$yield/go"
-		echo -e "$(cat "$dep_path")\n$(cat "$yield/go")" > "$yield/go" ;}
+		sed -i '1d' "$out/go"
+		echo -e "$(cat "$dep_path")\n$(cat "$out/go")" > "$out/go" ;}
 
 	function rel_path {
-		source="$(readlink -f "$1")"
-		target="$(readlink -f "$2")"
+		source="$(readlink -m "$1")"
+		target="$(readlink -m "$2")"
 			
 		common_part=$source
 		result=""
@@ -61,14 +61,13 @@ use_deps || {
 
 		echo $result; }
 
-	src_from_root="$(rel_path "$root" "$src")"
-	src_rel_path="$(echo '$root/'"$src_from_root" | sed 's/\//\\\//g')"
+	source_from_root="$(rel_path "$root" "$source")"
+	source_rel_path='$root/'"$source_from_root"
 
-	src_from_yield="$(rel_path "$yield" "$src")"
+	#source_from_out="$(rel_path "$out" "$source")"
 
-	sed -i "s/"'$0'"/$src_rel_path/" "$yield/go"
-	sed -i '2 i cd "$(dirname "$0")"' "$yield/go"
+	sed -i 's|$''0|'"$source_rel_path"'|g' "$out/go"
 
 	} || {
-	echo "failed to make go of $src"
+	echo "failed to make go of $source"
 	exit 1 ;}

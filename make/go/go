@@ -1,28 +1,27 @@
 #!/usr/bin/env bash
-cd "$(dirname "$0")"
 function usage {
-	echo "$(basename "$root/src/meta/make/go") <src> <yield>" ;}
+	echo "$(basename "$root/source/meta/make/go") <source> <out>" ;}
 if [ "$#" -ne 2 ]; then
 	echo "$(usage)"
 	exit 1 ;fi
 
 
 function use_deps {
-	cd "$(dirname "$root/src/meta/make/go")" ;}
+	cd "$(dirname "$root/source/meta/make/go")" ;}
 function use_coreutils {
-	([[ `uname` == 'Darwin' ]]
-	) && { [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] || {
-		echo "coreutils not found"
-		return 1 
-	} && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH" ;} }
+	if [[ `uname` == 'Darwin' ]]; then
+		[ -d "/usr/local/opt/coreutils/libexec/gnubin" ] || {
+			echo "coreutils not found"
+			return 1 
+		} && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH" ;fi }
 function use_node {
 	use_node_bare || {
 		return 1 
-	} && ([ -f "$(dirname $(npm root))/package.json" ]
-	) && { [ -d "$(npm root)" ] || {
-		#TODO: does not cover case of empty dependencies
-		echo "node modules not installed"
-		return 1 ;} } }
+	} && if [ -f "$(dirname $(npm root))/package.json" ]; then
+		[ -d "$(npm root)" ] || {
+			#TODO: does not cover case of empty dependencies
+			echo "node modules not installed"
+			return 1 ;} fi ;}
 function use_node_bare {
 	. ~/.nvm/nvm.sh --no-use
 	nvm use 10 > /dev/null
@@ -30,27 +29,34 @@ function use_node_bare {
 		echo "couldn't change to node v10"
 		return 1 ;} }
 function use_file {
-	[ -d "$1" ] || {
+	[ -f "$1" ] || {
 		echo "$1 doesn't exist"
 		return 1 ;} }
 
 function find_project_root {
 	git rev-parse --show-toplevel; } 
 
-src="$1"
-yield="$2"
+use_coreutils || {
+	exit 1 ;}
 
+bare_source="${1%/}"
+bare_out="${2%/}"
+
+source="$(readlink -m "$bare_source")"
+out="$(readlink -m "$bare_out")"
+
+cd "$(dirname "${0}")"
 root="$(find_project_root)"
 use_deps || {
-	echo "please compile $root/src/meta/make/go"
+	echo "please compile $root/source/meta/make/go"
 	exit 1 
 } && use_coreutils || {
 	exit 1 
-} && use_file "$src/go" || {
+} && use_file "$source/go" || {
 	exit 1 
 } && {
-	mkdir -p "$yield" && rm -r "$yield/*" 2> /dev/null
-	cp "$src/go" "$yield/go"
+	mkdir -p "$out" && rm -r "$out/*" 2> /dev/null
+	cp "$source/go" "$out/go"
 
 	function search_deps {
 		([[ -f "$1/deps.sh" ]]
@@ -66,7 +72,7 @@ use_deps || {
 			echo "$o"
 			return $e ;} }
 	
-	dep_path="$(search_deps "$src")"
+	dep_path="$(search_deps "$source")"
 	has_dep=$?
 
 	function status {
@@ -74,13 +80,13 @@ use_deps || {
 	
 	(status $has_dep) && {
 		#remove shebang
-		sed -i '1d' "$yield/go"
+		sed -i '1d' "$out/go"
 		echo -e "$(cat "$dep_path")
-$(cat "$yield/go")" > "$yield/go" ;}
+$(cat "$out/go")" > "$out/go" ;}
 
 	function rel_path {
-		source="$(readlink -f "$1")"
-		target="$(readlink -f "$2")"
+		source="$(readlink -m "$1")"
+		target="$(readlink -m "$2")"
 			
 		common_part=$source
 		result=""
@@ -104,14 +110,13 @@ $(cat "$yield/go")" > "$yield/go" ;}
 
 		echo $result; }
 
-	src_from_root="$(rel_path "$root" "$src")"
-	src_rel_path="$(echo '$root/'"$src_from_root" | sed 's/\//\\//g')"
+	source_from_root="$(rel_path "$root" "$source")"
+	source_rel_path='$root/'"$source_from_root"
 
-	src_from_yield="$(rel_path "$yield" "$src")"
+	#source_from_out="$(rel_path "$out" "$source")"
 
-	sed -i "s/"'$root/src/meta/make/go'"/$src_rel_path/" "$yield/go"
-	sed -i '2 i cd "$(dirname "$root/src/meta/make/go")"' "$yield/go"
+	sed -i 's|$''0|'"$source_rel_path"'|g' "$out/go"
 
 	} || {
-	echo "failed to make go of $src"
+	echo "failed to make go of $source"
 	exit 1 ;}

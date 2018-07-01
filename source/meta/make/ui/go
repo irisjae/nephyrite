@@ -4,10 +4,10 @@ use_deps || {
 	exit 1
 } && use_node || {
 	exit 1
-} && use_file "$src" || {
+} && use_file "$source" || {
 	exit 1
 } && time (
-	rm -r "$yield" 2> /dev/null
+	rm -r "$out" 2> /dev/null
 
 	(node "fn.js"
 	) && (./build/scenes/go
