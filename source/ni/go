@@ -2,10 +2,7 @@
 use_deps || {
 	echo "please compile $0"
 	exit 1
-} && use_node || {
-	exit 1
-} && use_file "$src" || {
-	exit 1
-} && node "fn.js" || {
-	echo "failed to host ni"
-	exit 1; }
+} && use_node || (fail
+) && [ "$#" -eq 1 ] && {
+	webroot="$(readlink -f "$1")" ;} || (fail echo "please specify one webroot"
+) && node "fn.js" "$webroot" || fail echo "failed to host ni"

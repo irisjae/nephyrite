@@ -1,34 +1,18 @@
-var R = require ('ramda');
-var fs = require ('fs-extra');
-var path = require ('path');
+var { T, Z_, R, path, fs, remove, link, child_files, prepare } = require ('./_util')
+var { argv } = require ('process')
 
-//constants
-var package_root = require ('get-root-path') .rootPath;
+var _source = argv [2]
+var _out = argv [3]
 
-var dist__webapp = path .join (package_root, '/dist/webapp');
-
-var dist__build__hci = path .join (package_root, '/dist/build/hci');
-var transform__webapp__merges = path .join (package_root, '/transform/webapp/merges');
+var _merges = path .join (__dirname, '/merges')
 
 
+;T (_source) (prepare)
 
-fs .ensureDirSync (dist__webapp);
-
-[fs .readdirSync (dist__webapp)]
-	.forEach (R .forEach (function (name) {
-		fs .removeSync (path .join (dist__webapp, name));
-	}));
-[fs .readdirSync (dist__build__hci)]
-	.forEach (R .forEach (function (name) {
-		fs .symlinkSync (
-			path .join (dist__build__hci, name),
-			path .join (dist__webapp, name));
-	}));
-[fs .readdirSync (transform__webapp__merges)]
-	.forEach (R .forEach (function (name) {
-		fs .removeSync (path .join (dist__webapp, name));
-		fs .symlinkSync (
-			path .join (transform__webapp__merges, name), 
-			path .join (dist__webapp, name));
-	}));
-
+;T (child_files (_out)) (R .forEach (filename => {{
+	;remove (path .join (_out, filename)) }}))
+;T (child_files (_source)) (R .forEach (filename => {{
+	;link (path .join (_in, filename)) (path .join (_out, filename)) }}))
+;T (child_files (_merges)) (R .forEach (filename => {{
+	;remove (path .join (_out, filename))
+	;link (path .join (_merges, filename)) (path .join (_out, filename)) }}))

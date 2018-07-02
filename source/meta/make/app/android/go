@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
-use_deps || {
+use_deps && as_make $@ || {
 	echo "please compile $0"
 	exit 1
-} && use_gnu_core_utils || {
-	exit 1
-} && use_node || {
-	exit 1
-} && use_file "$src" || {
-	exit 1
-} && {
+} && use_gnu_core_utils || (fail
+) && use_node || (fail
+) && use_file "$source" || (fail
+) && {
 	if [ -d "${package_root}/dist/cordova/android" ]; then
 		rm -r "${package_root}/dist/cordova/android" ;fi
 
@@ -33,7 +30,4 @@ use_deps || {
 	cordova-icon
 	#maybe no need www?
 	#zip -r cordova-android.zip config.xml www/ platforms/ plugins/
-	} || {
-	echo "failed to make app/android"
-	exit 1; }
-
+	} || fail echo "failed to make app/android"

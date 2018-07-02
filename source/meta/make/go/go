@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-use_deps || {
+use_deps && as_make $@ || {
 	echo "please compile $0"
 	exit 1 
-} && use_coreutils || {
-	exit 1 
-} && use_file "$source/go" || {
-	exit 1 
-} && {
+} && use_coreutils || (fail
+) && use_file "$source/go" || (fail
+) && {
 	mkdir -p "$out" && rm -r "$out/*" 2> /dev/null
 	cp "$source/go" "$out/go"
 
@@ -59,7 +57,7 @@ use_deps || {
 		elif [[ -n $forward_part ]]; then
 		    result="${forward_part:1}" ;fi
 
-		echo $result; }
+		echo $result ;}
 
 	source_from_root="$(rel_path "$root" "$source")"
 	source_rel_path='$root/'"$source_from_root"
@@ -68,6 +66,4 @@ use_deps || {
 
 	sed -i 's|$''0|'"$source_rel_path"'|g' "$out/go"
 
-	} || {
-	echo "failed to make go of $source"
-	exit 1 ;}
+	} || fail echo "failed to make go of $source"

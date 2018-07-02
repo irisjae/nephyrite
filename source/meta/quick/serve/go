@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+use_deps || {
+	echo "please compile $0"
+	exit 1
+} && use_file "$source" || {
+	exit 1
+} && "$root/make/ni/go" "$root/source/ni" "$root/out/ni" || {
+	exit 1
+} && "$root/out/ni/go" || {
+	echo "failed to start ni"
+	exit 1 ;}
+

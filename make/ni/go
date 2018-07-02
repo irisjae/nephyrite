@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function use_deps {
-	cd "$0" ;}
+	cd "$root/source/meta/make/ni" ;}
 function use_coreutils {
 	if [[ `uname` == 'Darwin' ]]; then
 		[ -d "/usr/local/opt/coreutils/libexec/gnubin" ] || {
@@ -49,3 +49,18 @@ use_coreutils || {
 	pwd="$(pwd)"
 	root="$(find_project_root)"
 	temp="$root/temp" ;}
+function as_make {
+	if [ "$#" -ne 2 ]; then
+		echo "$(basename "$(dirname ${0})") <source> <out>"
+		exit 1 ;fi
+
+	_pwd="$(pwd)"
+	cd "$pwd"
+	source="$(readlink -m "${1%/}")"
+	out="$(readlink -m "${2%/}")"
+	cd "$_pwd" ;}
+use_deps && as_make $@ || {
+	echo "please compile $root/source/meta/make/ni"
+	exit 1
+} && use_file "$source/go" || (fail
+) && "$root/make/go/go" "$source" "$out" || fail echo "failed to make ni"

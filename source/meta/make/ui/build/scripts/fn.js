@@ -1,21 +1,16 @@
-var Oo = require ('o-o-o-o-o') .Oo
-var o = require ('o-o-o-o-o') .o
-var oO = require ('o-o-o-o-o') .oO
-var R = require ('ramda')
+var { T, Z_, R, from_just, path, fs, link, ext_files, prepare } = require ('./_util')
+var { argv } = require ('process')
 
-var path = require ('path')
-var fs = require ('fs-extra')
-var files = require ('__/util') .files
-var prepare = require ('__/util') .prepare
+var _source = argv [2]
+var _out = argv [3]
 
-var ui_paths = require ('__/config') .paths 
 
-;; prepare (ui_paths .scripts .build)
+;T (_out) (prepare)
 
-;; Oo (files ('.js') (ui_paths .scripts .src), 
-	oO (R .forEach (src => {
-		var name = R .last (src .split ('/'))
-		var dest = path .join (ui_paths .scripts .build, name)
+;T (ext_files ('.js') (_source)) (R .forEach (_source_file => {{
+		var _out_file = T (_source_file) ([
+			R .split ('/'),
+			R .last, 
+			_filename => path .join (_out, _filename) ])
 
-		;; fs .symlinkSync (src, dest)
-	})))
+		;link (_source_file) (_out_file) }}))
