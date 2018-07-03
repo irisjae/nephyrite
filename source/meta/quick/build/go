@@ -2,7 +2,5 @@
 use_deps || {
 	echo "please compile $0"
 	exit 1
-} && use_file "$source" || {
-	exit 1
 } && "$root/make/ui/go" "$root/source/ui" "$root/out/ui" || {
 	exit 1; }

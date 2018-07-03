@@ -1,18 +1,15 @@
-var Oo = require ('o-o-o-o-o') .Oo
-var o = require ('o-o-o-o-o') .o
-var oO = require ('o-o-o-o-o') .oO
-var R = require ('ramda')
+var { T, Z_, R, from_just, path, fs, link, ext_files, prepare } = require ('./_util')
+var { argv } = require ('process')
+var styles = require ('./style_tree')
 
-var path = require ('path')
-var fs = require ('fs-extra')
-var file = require ('__/util') .file
-var files = require ('__/util') .files
-var write = require ('__/util') .write
-var prepare = require ('__/util') .prepare
+var _source = argv [2]
+var _out = argv [3]
+
+
+;T (_out) (prepare)
 
 var ui_paths = require ('__/config') .paths 
 
-var styles = require ('./style_tree')
 					
 					
 

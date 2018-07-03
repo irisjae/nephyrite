@@ -14,3 +14,6 @@ var config = {}
 
 var api = S .data ()
 var logs = S .data ()
+
+module .exports =
+	{ routes, _routing, config, api, logs }

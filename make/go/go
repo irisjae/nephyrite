@@ -30,7 +30,10 @@ function use_file {
 function find_project_root {
 	_pwd="$(pwd)"
 	cd "$(dirname "${0}")"
-	git rev-parse --show-toplevel
+	git rev-parse --show-toplevel || {
+		echo "failed to find project root"
+		echo "is git installed?"
+		return 1 ;}
 	cd "$_pwd" ;} 
 function find_temp_path {
 	use_coreutils && tmp_path="$temp/$(date +%s)" && [ ! -e "$tmp_path" ] && {
@@ -43,12 +46,9 @@ function fail {
 	eval $@
 	exit 1 ;}
 
-use_coreutils || {
-	exit 1 
-} && {
-	pwd="$(pwd)"
-	root="$(find_project_root)"
-	temp="$root/temp" ;}
+pwd="$(pwd)"
+root="$(find_project_root || exit)"
+temp="$root/temp"
 function as_make {
 	if [ "$#" -ne 2 ]; then
 		echo "$(basename "$(dirname ${0})") <source> <out>"

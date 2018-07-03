@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-[[ `uname` == 'Darwin' ]] && { [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] || { echo "gnu tools not found"; exit 1; } && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"; }
-cd "$(dirname "$0")"
-cd "$(git rev-parse --show-toplevel)"
-
-./transform/refresh/$.sh
