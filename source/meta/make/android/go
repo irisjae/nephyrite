@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
+#TODO: declare cordova dep
 use_deps && as_make $@ || {
 	echo "please compile $0"
 	exit 1
-} && use_gnu_core_utils || (fail
+} && use_coreutils || (fail
 ) && use_node || (fail
 ) && use_file "$source" || (fail
 ) && {
-	if [ -d "${package_root}/dist/cordova/android" ]; then
-		rm -r "${package_root}/dist/cordova/android" ;fi
+	if [ -d "$out" ]; then
+		rm -r "$out" ;fi
 
-	mkdir "${package_root}/dist/cordova/android"
-	cd "${package_root}/dist/cordova/android"
+	mkdir "$out"
+	cd "$out"
 
-	find "${package_root}/dist/cordova/$" -mindepth 1 -maxdepth 1 -print0 \
+	find "$source" -mindepth 1 -maxdepth 1 -print0 \
 		| xargs -0 ln -s --target-directory=.
 
 	cp --remove-destination "$(readlink -f config.xml)" config.xml

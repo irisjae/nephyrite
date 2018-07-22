@@ -1,38 +1,30 @@
-var Oo = require ('o-o-o-o-o') .Oo;
-var o = require ('o-o-o-o-o') .o;
-var oO = require ('o-o-o-o-o') .oO;
-var R = require ('ramda');
+var { T, R } = require ('ex-jay-esque')
 
-var window = require ('__/modules/window');
-var Promise = require ('bludbird');
+var window = require ('__window')
+var Promise = require ('bludbird')
+var console = require ('__console')
 
 
 
-var then = R .invoker (1, 'then');
 
 
 /*
 Errors
 */
-window .addEventListener ('unhandledrejection', function (e) {
-	e .preventDefault ();
+;window .addEventListener ('unhandledrejection', e => {{
+	;e .preventDefault ()
 	
-	console .error (e);
-});
-window .onerror = function (message, source, lineno, colno, error) {
-	console .error (message, source, lineno, colno, error);
-};
+	;console .error (e) }})
+;window .onerror = (message, source, lineno, colno, error) => {{
+	;console .error (message, source, lineno, colno, error)
+}}
 
 /*
 Use app
 */
-Oo (promise_of (x => {
-		if (window .cordova !== 'undefined')
-			document .addEventListener ('deviceready', x);
-		else
-			document .addEventListener ('DOMContentLoaded', x);
-	}),
-	oO (then (function () {
-		window .ui_ = window .uis .$ ();
-	}))
-)
+;T (promise_of (x => {{
+	;document .addEventListener (
+		!! (window .cordova !== 'undefined')
+		? 'deviceready'
+		: 'DOMContentLoaded', x) }})) (then (_ => {{
+	;window .ui_ = window .uis .$ () }}))

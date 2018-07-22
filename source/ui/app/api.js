@@ -12,8 +12,8 @@ var _routing = {}
 
 var config = {}
 
-var api = S .data ()
+var api = _ => go
 var logs = S .data ()
 
 module .exports =
-	{ routes, _routing, config, api, logs }
+{ routes, _routing, config, api, logs }

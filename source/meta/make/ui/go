@@ -8,8 +8,8 @@ use_deps && as_make $@ || {
 	rm -r "$out" 2> /dev/null
 
 	(node "fn.js"
-	) && (./build/scenes/go
-	) && (./build/styles/go
-	) && (./build/scripts/go
-	) && (./build/assets/go
+	) && ("$pwd/build/scenes/go"
+	) && ("$pwd/build/styles/go"
+	) && ("$pwd/build/scripts/go"
+	) && ("$pwd/build/assets/go"
 	) ) || fail echo "failed to make ui"
