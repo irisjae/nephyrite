@@ -1,7 +1,3 @@
-module .exports = x => {
-	var dom = ui_info .dom .cloneNode (true);
-	
-	return {
-		dom: dom
-	}
-}
+module .exports = ({ app_ST, ensemble_ST, io_ST, feedback_ST }) => {{
+	//;S (_ => {{}})
+	}}
