@@ -52,5 +52,5 @@ temp="$root/temp"
 use_deps || {
 	echo "please compile $root/source/meta/quick/build"
 	exit 1
-} && "$root/make/ui/go" "$root/source/ui" "$root/out/ui" || {
+} && "$root/make/ui/," "$root/source/ui" "$root/out/ui" || {
 	exit 1; }

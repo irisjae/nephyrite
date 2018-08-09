@@ -1,1 +1,0 @@
-invisible/elsewhere/source/meta/quick/refresh/amas.sh

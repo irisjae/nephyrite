@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 use_deps || {
-	iecho "please compile $0"
+	echo "please compile $0"
 	exit 1
 } && {
 	if [[ `uname` == 'Darwin' ]]; then
@@ -90,7 +90,7 @@ use_deps || {
 	echo
 
 
-	echo refreshing amas...
+	echo refreshing elsewheres...
 	./quick/refresh
 	echo
 	echo ;}

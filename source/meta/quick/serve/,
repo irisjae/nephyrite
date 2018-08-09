@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+use_deps || {
+	echo "please compile $0"
+	exit 1
+} && "$root/make/hi/," "$root/source/hi" "$root/out/hi" || {
+	exit 1
+} && "$root/out/hi/," "$root/out/webapp" || {
+	echo "failed to start hi"
+	exit 1 ;}
+

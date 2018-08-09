@@ -6,10 +6,10 @@ use_deps && as_make $@ || {
 ) && use_file "$source" || (fail
 ) && time (
 	rm -r "$out" 2> /dev/null
+	mk -p "$out"
 
-	(node "fn.js"
-	) && ("$pwd/build/scenes/go"
-	) && ("$pwd/build/styles/go"
-	) && ("$pwd/build/scripts/go"
-	) && ("$pwd/build/assets/go"
+	("$pwd/build/scenes/,"
+	) && ("$pwd/build/styles/,"
+	) && ("$pwd/build/scripts/,"
+	) && ("$pwd/build/assets/,"
 	) ) || fail echo "failed to make ui"

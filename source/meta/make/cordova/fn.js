@@ -27,15 +27,15 @@ var _out_www = path .join (_out, '/www')
 ;T (child_files (_source_ui)) ([
 	Z_ .filter (_filename => _filename !== 'index.html'),
 	R .forEach (_filename => {{
-		;link (
-		path .join (_source_ui, _filename)) (
-		path .join (_out_www, _filename)) }}) ])
+		;link
+		(path .join (_source_ui, _filename))
+		(path .join (_out_www, _filename)) }}) ])
 
 ;T (child_files (src__cordova)) ([
 	R .filter (_filename => ! _filename .endsWith ('-ama')),
 	R .forEach (_filename => {{
 		;remove (path .join (_out, _filename))
-		;link (
-		path .join (src__cordova, _filename)) (
-		path .join (_out, _filename)) }}) ])
+		;link
+		(path .join (src__cordova, _filename))
+		(path .join (_out, _filename)) }}) ])
 

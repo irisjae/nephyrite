@@ -52,8 +52,8 @@ temp="$root/temp"
 use_deps || {
 	echo "please compile $root/source/meta/quick/serve"
 	exit 1
-} && "$root/make/ni/go" "$root/source/ni" "$root/out/ni" || {
+} && "$root/make/ni/," "$root/source/ni" "$root/out/ni" || {
 	exit 1
-} && "$root/out/ni/go" "$root/out/webapp" || {
+} && "$root/out/ni/," "$root/out/webapp" || {
 	echo "failed to start ni"
 	exit 1 ;}
