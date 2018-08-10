@@ -51,28 +51,25 @@ var scale_flux = x => {
 
 var val_scale_info = function (samples) {
 	var number_breakdowns = samples .map (number_breakdown_from_val);
-	var base_numbers = R .head (number_breakdowns) .filter (function (v, i) {
-		return i % 2 === 1;
-	});
-	if (! base_numbers .length)
-		return []
-	else
-		return base_numbers .reduce (function (sum, next, k) {
-			var i = 2 * k + 1;
-			if (next === number_breakdowns [1] [i] && next === number_breakdowns [2] [i]) {
-				return R .adjust (
-					R .concat (R .__, '' + next + number_breakdowns [0] [i + 1])
-				) (sum .length - 1) (sum)
-			}
-			else {
-				var fluxes = scale_flux (samples .map ((sample, l) =>
-					R .merge (sample, {
-						$: number_breakdowns [l] [i]
-					})
-				));
-				return R .concat (sum, [[next, fluxes .x_flux, fluxes .y_flux], number_breakdowns [0] [i + 1]]);
-			}
-		}, [number_breakdowns [0] [0]])
+	var base_numbers = R .head (number_breakdowns) .filter ((_, i) => i % 2 === 1);
+	return !! (! base_numbers .length)
+	? []
+	: base_numbers .reduce (function (sum, next, k) {
+		var i = 2 * k + 1;
+		if (next === number_breakdowns [1] [i] && next === number_breakdowns [2] [i]) {
+			return R .adjust (
+				R .concat (R .__, '' + next + number_breakdowns [0] [i + 1])
+			) (sum .length - 1) (sum)
+		}
+		else {
+			var fluxes = scale_flux (samples .map ((sample, l) =>
+				R .merge (sample, {
+					$: number_breakdowns [l] [i]
+				})
+			));
+			return R .concat (sum, [[next, fluxes .x_flux, fluxes .y_flux], number_breakdowns [0] [i + 1]]);
+		}
+	}, [number_breakdowns [0] [0]])
 };
 	var val_string_break = function (x) {
 		return x

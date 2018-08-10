@@ -4,4 +4,5 @@ use_deps && as_make $@ || {
 	exit 1
 } && use_node || (fail
 ) && use_file "$source" || (fail
-) && node "fn.js" "$source" "$out" || fail echo "failed to make cordova"
+) && {
+	} || fail echo "failed to make cordova"

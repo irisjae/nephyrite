@@ -1,13 +1,13 @@
-var debug = true;
+var debug = true
 
-var hostname = process .env .C9_HOSTNAME || 'localhost';
-var port = process .env .PORT || 8080;
+var hostname = process .env .HOSTNAME || 'localhost'
+var port = process .env .PORT || 8080
 
 var { argv } = require ('process')
 
 var webroot = argv [2]
 
-require ('koa-qs') (new (require ('koa')) ())
+;require ('koa-qs') (new (require ('koa')) ())
 	.use (require ('koa-compress') ())
 	.use (require ('koa-cors') ())
 	.use (function (ctx, next) {
@@ -30,6 +30,6 @@ require ('koa-qs') (new (require ('koa')) ())
 	.use (require ('koa-json') ())
 	.use (require ('koa-static') (webroot))
 	
-	.listen (port);
+	.listen (port)
 
-console .log ('Listening at ' + hostname + ':' + port + '...')
+;console .log ('Listening at ' + hostname + ':' + port + '...')
