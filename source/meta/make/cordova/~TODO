@@ -1,0 +1,2 @@
+TODO: make sure cordova.js is linked into index.html
+double check: are any plugin_install hooks are skipped? is it important?

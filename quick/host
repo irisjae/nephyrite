@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function use_deps {
-	cd "$root/source/meta/quick/build" ;}
+	cd "$root/../../source/meta/quick/host" ;}
 function use_coreutils {
 	if [[ `uname` == 'Darwin' ]]; then
 		[ -d "/usr/local/opt/coreutils/libexec/gnubin" ] || {
@@ -48,9 +48,12 @@ function fail {
 
 pwd="$(pwd)"
 root="$(find_project_root || exit)"
-temp="$root/temp"
+temp="$root/.temp"
 use_deps || {
-	echo "please compile $root/source/meta/quick/build"
+	echo "please compile $root/../../source/meta/quick/host"
 	exit 1
-} && "$root/make/ui/," "$root/source/ui" "$root/out/ui" || {
-	exit 1; }
+} && "$root/make/hi/," "$root/source/hi" "$root/out/hi" || {
+	exit 1
+} && "$root/out/hi/," "$root/out/webapp" || {
+	echo "failed to start hi"
+	exit 1 ;}

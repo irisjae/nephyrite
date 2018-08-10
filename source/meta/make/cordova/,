@@ -5,4 +5,8 @@ use_deps && as_make $@ || {
 } && use_node || (fail
 ) && use_file "$source" || (fail
 ) && {
+	mkdir -p "$out" 2> /dev/null
+	rm -rf "$out/*" 2> /dev/null
+	ln -s "$source/*" "$out/"
+	ln -s {./config.xml,./icon.png,./splash.png} "$out/"
 	} || fail echo "failed to make cordova"

@@ -1,11 +1,6 @@
-# invisible
 invisible
+/out
+/.elsewheres
+/.temp
 
-# out
-/out/**
-
-# temp
-/temp
-
-# npm modules
 node_modules

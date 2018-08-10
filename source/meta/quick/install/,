@@ -46,51 +46,24 @@ use_deps || {
 	echo
 
 	echo checking npm version...
-	if ! npm outdated -g npm | grep -z npm; then
-	    echo npm is up to date
+	if npm list -g npm@5.6.0; then
+	    echo already using npm@5.6.0
 	else
 	    echo trying to update npm...
-	    npm install -g npm ;fi
+	    npm install -g npm@5.6.0 ;fi
 	echo
 	echo
 
-	echo checking ama...
-	if npm list -g ama; then
-	    echo ama already installed
+	echo checking pnpm...
+	if npm list -g pnpm; then
+	    echo pnpm already installed
 	else
-	    echo trying install ama...
-	    npm install -g jade-ama ;fi
+	    echo trying install pnpm...
+	    npm install -g pnpm ;fi
 	echo
 	echo
-
-
-	echo checking cordova...
-	if npm list -g cordova@8.0.0; then
-	    echo cordova already installed
-	else
-	    echo trying install cordova...
-	    npm install -g cordova@8.0.0 ;fi
-	echo
-	echo
-
-
-
-
-	cd "$(dirname "$0")"
-	cd "$(git rev-parse --show-toplevel)"
-
-	find . -name package.json
-	echo installing npm packages...
-	find . -not -regex .*/node_modules/.* -name package.json -exec bash -c 'for f; do git check-ignore -q "$f" || echo "$f"; done' {} + | while read f; do
-		pushd "$(dirname "$f")"
-		npm install
-		ln -s ../ node_modules/__ 2> /dev/null
-		popd ;done
-	echo
-	echo
-
 
 	echo refreshing elsewheres...
-	./quick/refresh
+	./quick/elsewheres
 	echo
 	echo ;}

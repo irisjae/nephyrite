@@ -1,0 +1,3 @@
+fix a solution for linking in package.json
+node becomes a compiled langauage, how to run? we cant use node.
+browserify

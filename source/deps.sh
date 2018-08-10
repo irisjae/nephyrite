@@ -1,1 +1,1 @@
-../invisible/elsewheres/comma-core/source/deps.sh
+../.elsewheres/comma-core/source/deps.sh

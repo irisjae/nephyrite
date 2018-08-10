@@ -1,0 +1,32 @@
+dependencies:
+  bluebird: 3.5.1
+  ramda: 0.24.1
+  s-js: 0.4.9
+  surplus: 0.5.3
+packages:
+  /bluebird/3.5.1:
+    dev: false
+    resolution:
+      integrity: sha512-MKiLiV+I1AA596t9w1sQJ8jkiSr5+ZKi0WKrYGUn6d1Fx+Ij4tIj+m2WMQSGczs5jZVxV339chE8iwk6F64wjA==
+  /ramda/0.24.1:
+    dev: false
+    resolution:
+      integrity: sha1-w7d1UZfzW43DUCIoJixMkd22uFc=
+  /s-js/0.4.9:
+    dev: false
+    resolution:
+      integrity: sha512-RtpOm+cM6O0sHg6IA70wH+UC3FZcND+rccBZpBAHzlUgNO2Bm5BN+FnM8+OBxzXdwpKWFwX11JGF0MFRkhSoIQ==
+  /surplus/0.5.3:
+    dev: false
+    peerDependencies:
+      s-js: ^0.4.9
+    resolution:
+      integrity: sha512-3Ki9XL9mSLXnx1dtyCtUrFsSYhYCpVAXr0gGiSmIMNDtWpODk6P9D3B+8GpmHAhJQZBmfySaaOg4uZ94XIcbiA==
+registry: 'https://registry.npmjs.org/'
+shrinkwrapMinorVersion: 8
+shrinkwrapVersion: 3
+specifiers:
+  bluebird: ^3.5.1
+  ramda: ^0.24.1
+  s-js: ^0.4.7
+  surplus: ^0.5.0
